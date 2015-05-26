@@ -7,13 +7,16 @@
 namespace beacon {
 
 void receiver(std::uint16_t port) {
-    UdpSocket socket(port);
+    UdpSocket socket;
+    socket.enableReuseAddr();
+    socket.bind(port);
+
     Datagram datagram;
 
     while(true) {
         if(socket.receiveNonblock(datagram)) {
-            std::cout << datagram.buffer << std::endl;
-            std::cout << datagram.address << " " << datagram.port << std::endl;
+            std::cout << datagram.address << " " << datagram.port <<
+                         " " << datagram.buffer << std::endl;
         } else {
             // only sleep if nothing was received
             usleep(1000*1000);

@@ -25,20 +25,21 @@ struct Datagram {
 
 class UdpSocket {
 public:
-    UdpSocket(const std::string &address, std::uint16_t port);
-    explicit UdpSocket(std::uint16_t port);
-    explicit UdpSocket(const std::string &address);
     UdpSocket();
     ~UdpSocket();
 
+    void bind(const std::string &address, std::uint16_t port);
+    void bind(std::uint16_t port);
+    void bind(const std::string &address);
+    void bind();
+
     void enableBroadcast(bool enable = true);
+    void enableReuseAddr(bool enable = true);
 
     void send(const Datagram &datagram);
     bool receive(Datagram &datagram);
     bool receiveNonblock(Datagram &datagram);
 private:
-    void bind(const std::string &address, std::uint16_t port);
-
     int fd;
 };
 

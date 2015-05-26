@@ -17,12 +17,6 @@ const char* BeaconException::what() const noexcept {
 }
 
 void UdpSocket::bind(const std::string &address, std::uint16_t port) {
-    fd = socket(AF_INET, SOCK_DGRAM, 0);
-
-    if(-1 == fd) {
-        throw BeaconException(std::string("Failed to call socket(): ") + std::strerror(errno));
-    }
-
     struct sockaddr_in servAddr;
     std::memset(&servAddr, 0, sizeof(servAddr));
     servAddr.sin_family = AF_INET;
@@ -35,20 +29,24 @@ void UdpSocket::bind(const std::string &address, std::uint16_t port) {
     }
 }
 
-UdpSocket::UdpSocket(const std::string &address, std::uint16_t port) {
-    bind(address, port);
-}
-
-UdpSocket::UdpSocket(std::uint16_t port) {
+void UdpSocket::bind(std::uint16_t port) {
     bind("0.0.0.0", port);
 }
 
-UdpSocket::UdpSocket(const std::string &address) {
+void UdpSocket::bind(const std::string &address) {
     bind(address, 0);
 }
 
-UdpSocket::UdpSocket() {
+void UdpSocket::bind() {
     bind("0.0.0.0", 0);
+}
+
+UdpSocket::UdpSocket() {
+    fd = socket(AF_INET, SOCK_DGRAM, 0);
+
+    if(-1 == fd) {
+        throw BeaconException(std::string("Failed to call socket(): ") + std::strerror(errno));
+    }
 }
 
 UdpSocket::~UdpSocket() {
@@ -59,6 +57,16 @@ void UdpSocket::enableBroadcast(bool enable) {
     int broadcastEnable = enable;
     int ret = setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &broadcastEnable,
                        sizeof(broadcastEnable));
+
+    if(ret == -1) {
+        throw BeaconException(std::string("Failed to call setsockopt(): ") + std::strerror(errno));
+    }
+}
+
+void UdpSocket::enableReuseAddr(bool enable) {
+    int reuseaddrEnable = enable;
+    int ret = setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &reuseaddrEnable,
+                       sizeof(reuseaddrEnable));
 
     if(ret == -1) {
         throw BeaconException(std::string("Failed to call setsockopt(): ") + std::strerror(errno));

@@ -22,6 +22,8 @@ void sender(std::uint16_t port, const std::string &message) {
 
     UdpSocket socket;
     socket.enableBroadcast();
+    socket.enableReuseAddr();
+    socket.bind();
     Datagram datagram;
 
     datagram.port = port;
