@@ -6,7 +6,7 @@
 
 namespace beacon {
 
-void sender(std::uint16_t port, const std::string &message);
+void sender(std::uint16_t port, const std::string &message, bool enableLogging);
 bool getIPV4BroadcastAddresses(std::vector<std::string> &result);
 
 } // namespace beacon

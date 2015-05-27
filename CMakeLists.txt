@@ -6,12 +6,14 @@ set(SOURCES
     src/common.cpp
     src/sender.cpp
     src/receiver.cpp
+    src/daemon.cpp
 )
 
 set(HEADERS
     include/beacon/common.h
     include/beacon/sender.h
     include/beacon/receiver.h
+    include/beacon/daemon.h
 )
 
 include_directories(include)

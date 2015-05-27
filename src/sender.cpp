@@ -12,12 +12,14 @@
 
 namespace beacon {
 
-void sender(std::uint16_t port, const std::string &message) {
+void sender(std::uint16_t port, const std::string &message, bool enableLogging) {
     std::vector<std::string> addresses;
     getIPV4BroadcastAddresses(addresses);
 
-    for(std::string a : addresses) {
-        std::cout << a << std::endl;
+    if(enableLogging) {
+        for(std::string a : addresses) {
+            std::cout << a << std::endl;
+        }
     }
 
     UdpSocket socket;
